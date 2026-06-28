@@ -349,8 +349,8 @@ The Gemini API key is stored in `server/.env` and never sent to the browser.
 After deploying, add test credentials here:
 
 ```
-Email:    demo@taskflow.ai
-Password: Demo@1234!
+Email:    abc1de3@gmail.com
+Password: @Bc1de3
 ```
 
 > Or register with any email — OTP will appear in the server logs if SMTP is not configured.
