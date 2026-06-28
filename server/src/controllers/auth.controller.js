@@ -1,0 +1,12 @@
+const authService = require('../services/auth.service')
+const { successResponse, errorResponse } = require('../utils/apiResponse')
+
+const register    = async (req,res,next) => { try { const { name,email,password } = req.body; if (!name||!email||!password) return errorResponse(res,'Name, email and password are required.',400); const data = await authService.initiateRegister({name,email,password}); return successResponse(res,data,'OTP sent to your email.') } catch(e){ if(e.allErrors) return res.status(e.statusCode||400).json({success:false,error:e.message,errors:e.allErrors}); next(e) } }
+const verifyOTP   = async (req,res,next) => { try { const {email,otp}=req.body; if(!email||!otp) return errorResponse(res,'Email and OTP required.',400); const {user,token}=await authService.verifyOTPAndRegister({email,otp}); return successResponse(res,{user,token},'Email verified! Account created.',201) } catch(e){ next(e) } }
+const resendOTP   = async (req,res,next) => { try { const {email}=req.body; if(!email) return errorResponse(res,'Email required.',400); await authService.resendOTP({email}); return successResponse(res,{email},'New OTP sent.') } catch(e){ next(e) } }
+const login       = async (req,res,next) => { try { const {email,password}=req.body; if(!email||!password) return errorResponse(res,'Email and password required.',400); const {user,token}=await authService.login({email,password}); return successResponse(res,{user,token},'Logged in.') } catch(e){ next(e) } }
+const getMe       = async (req,res,next) => { try { return successResponse(res,{user:req.user}) } catch(e){ next(e) } }
+const forgotPassword = async (req,res,next) => { try { const {email}=req.body; if(!email) return errorResponse(res,'Email required.',400); const data=await authService.forgotPassword({email}); return successResponse(res,data,data.message) } catch(e){ next(e) } }
+const resetPassword  = async (req,res,next) => { try { const {email,token,newPassword}=req.body; if(!email||!token||!newPassword) return errorResponse(res,'Email, token and new password required.',400); const {user,tokenJWT}=await authService.resetPassword({email,token,newPassword}); return successResponse(res,{user},'Password reset successfully. Please log in.') } catch(e){ if(e.allErrors) return res.status(e.statusCode||400).json({success:false,error:e.message,errors:e.allErrors}); next(e) } }
+
+module.exports = { register, verifyOTP, resendOTP, login, getMe, forgotPassword, resetPassword }
