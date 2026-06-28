@@ -288,7 +288,7 @@ http://localhost:5000/api
 ```
 **Response:**
 ```json
-{ "effortHours": 4, "suggestedDueDate": "2025-07-05", "priority": "high", "reasoning": "..." }
+{ "effortHours": 4, "suggestedDueDate": "2026-07-05", "priority": "high", "reasoning": "..." }
 ```
 
 ### Activities
